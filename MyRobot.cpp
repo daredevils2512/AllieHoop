@@ -56,7 +56,7 @@ class RobotDemo : public SimpleRobot
 	PIDController flywheelspeed;
 	Timer stopwatch;
 	Timer stopwatch1;
-	AxisCamera Camera;	//Initialize me
+	AxisCamera& Camera;	//Initialize me
 	RobotDrive myRobot; // robot drive system
 
 	
@@ -103,10 +103,10 @@ public:
 		LeftWheels(2,1,2,2),
 		RightWheels(1,1,1,2),
 		BottomWheels(2,5,2,6),
+		flywheelspeed(3,.005,.0001,&BottomWheels,&BottomWheelsMotor),
 		stopwatch(),
 		stopwatch1(),
-		flywheelspeed(3,.005,.0001,&BottomWheels,PIDOutput),
-		Camera(),
+		Camera(AxisCamera::GetInstance("192.168.0.2")),
 		myRobot(&FrontLeftMotor, &RearLeftMotor, &FrontRightMotor, &RearRightMotor)
 		//robotdrive function my accept speedcontoller memory locations as placeholders
 		//for motors themselves
