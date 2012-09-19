@@ -129,90 +129,85 @@ public:
 		wheelsDown.Set(true);
 		leftWheels.Reset();
 		rightWheels.Reset();
-		while(!IsOperatorControl()){
-			while(true){		//must run for whole autonomous
-				bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
-				if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
-					wheelsReady = true;
-				} else {
-					wheelsReady = false;
-				}
+		
+		while(autostate == 0){
+		bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
+		if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
+			autostate = 1;
 			}
-			while(autostate == 0){//shoots first ball
-				if(wheelsReady == true){
-					Wait(.5);
-					launcherIn.Set(true);
-					launcherOut.Set(false);
-					Wait(.25);
-					launcherOut.Set(true);
-					launcherIn.Set(false);
-					wheelsReady = false;
-					autostate = 1;
-				}
-			}
-			while(autostate == 1){//moves second ball into position
-				elevator.Set(Relay::kOn);
-				Wait(2);
-				elevator.Set(Relay::kOff);
+		}
+			Wait(.5);//Begin...Shoot First Ball
+			launcherIn.Set(true);
+			launcherOut.Set(false);
+			Wait(.25);
+			launcherOut.Set(true);
+			launcherIn.Set(false);
+			wheelsReady = false;//End...Shoot First Ball
+			elevator.Set(Relay::kOn);//Begin...Run Elevator
+			Wait(2);
+			elevator.Set(Relay::kOff);//End...Run Elevator
+			while(autostate == 1){
+			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
+			if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
 				autostate = 2;
+				}
 			}
-			while(autostate == 2){//shoots second ball
-				if(wheelsReady == true){
-					Wait(.5);
-					launcherIn.Set(true);
-					launcherOut.Set(false);
-					Wait(.25);
-					launcherOut.Set(true);
-					launcherIn.Set(false);
-					wheelsReady = false;
+			Wait(.5);//Begin...Shoot Second Ball
+			launcherIn.Set(true);
+			launcherOut.Set(false);
+			Wait(.25);
+			launcherOut.Set(true);
+			launcherIn.Set(false);
+			wheelsReady = false;//End...Shoo Second Ball
+		if(stick2.GetThrottle() > 2){//Begin...Drive to bridge
+			while(autostate == 2){
+				if(leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690){
 					autostate = 3;
 				}
+				myRobot.TankDrive(.5, (leftWheels.Get() - rightWheels.Get())*.001 + .5);
+				}//End...Drive to Bridge
 			}
-			while(autostate == 3 && stick2.GetThrottle() > 2){	//Drive to bridge
-				if(leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690){
+		stopwatch.Reset();
+		stopwatch.Start();
+		if (stick2.GetThrottle() > 2){ //Tip bridge
+			while(autostate == 3){
+				if(stopwatch.Get() >= 3){
 					autostate = 4;
 				}
-				myRobot.TankDrive(.5, (leftWheels.Get() - rightWheels.Get())*.001 + .5);
-			}
-			stopwatch.Reset();
-			stopwatch.Start();
-			while (autostate == 4 && stick2.GetThrottle() > 2){ //Tip bridge
-				if(stopwatch.Get() >= 3){
-					autostate = 5;
-				}
 				if(!scoopDown.Get()){
-					scoopMotor.Set(1);
+				scoopMotor.Set(1);
 				}
 				else{
 					scoopMotor.Set(0);
-					autostate = 5;
+					autostate = 4;
 				}
 			}
-			stopwatch.Stop();
-			stopwatch.Reset();
-			while(autostate == 5 && stick2.GetThrottle() > 2){
-				Wait(3);
-				autostate = 6;
-			}
-			stopwatch.Start();
-			while(autostate == 6 && stick2.GetThrottle() > 2){
-				
+		}
+		stopwatch.Stop();
+		stopwatch.Reset();
+		if(stick2.GetThrottle() > 2){
+			Wait(3);
+		}
+		stopwatch.Start();
+		if(stick2.GetThrottle() > 2){
+			while(autostate == 4){
 				if(stopwatch.Get() >= 2 ){
 					scoopMotor.Set(0);
-					autostate = 7;
+					autostate = 5;
 				}
 				if(!scoopUp.Get()){
 					scoopMotor.Set(-.6);
 				}
 				else{
 					scoopMotor.Set(0);
-					autostate = 7;
+					autostate = 5;
 				}
 			}
-			stopwatch.Stop();
-			stopwatch.Reset();
 		}
-	}
+		stopwatch.Stop();
+		stopwatch.Reset();
+	}//End...Tip bridge
+
 
 	void OperatorControl(void)
 	{
