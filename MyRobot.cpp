@@ -30,6 +30,8 @@ class RobotDemo : public SimpleRobot
 	bool autoscoop;
 	bool runbrush;
 	bool ballintop;
+	bool risingedgevalue;
+	bool button1;
 
 	Joystick stick1;
 	Joystick stick2;
@@ -56,7 +58,7 @@ class RobotDemo : public SimpleRobot
 	PIDController flywheelspeed;
 	Timer stopwatch;
 	Timer stopwatch1;
-	AxisCamera& Camera;	//Initialize me
+	AxisCamera& Camera;	
 	RobotDrive myRobot; // robot drive system
 
 	
@@ -80,7 +82,9 @@ public:
 		wheelsready(false),
 		autoscoop(false),
 		runbrush(false),
-		ballintop(false),		
+		ballintop(false),
+		risingedgevalue(false),
+		button1(false),
 		stick1(1),		// as they are declared above.
 		stick2(2),
 		ScoopMotor(1,5),
@@ -331,15 +335,19 @@ public:
 				}
 			}
 			//Ball Position
-			if(LowLightSensor.Get()){
+			if(!risingedgevalue && LowLightSensor.Get()){
 				ballsinlow++;
+				risingedgevalue = true ;
+			}
+			if (risingedgevalue && !LowLightSensor.Get()){
+				risingedgevalue = false;
 			}
 			if(HighLightSensor.Get()){
 				stopwatch1.Reset();
 				stopwatch1.Start();
 			}
 			if(stopwatch1.Get() >= 2.5){
-				ballsinhigh++;//FIX ME
+				ballsinhigh++;
 				ballsinlow--;
 				stopwatch1.Stop();
 				stopwatch1.Reset();
@@ -369,7 +377,7 @@ public:
 				Elevator.Set(Relay::kOff);
 			}
 			//Flywheel speed
-			if(stick2.GetRawButton(3)){  //ME TOO
+			if(stick2.GetRawButton(3)){  
 				desiredflywheelspeed = key;
 			}
 			else if(stick2.GetRawButton(4)){
@@ -396,6 +404,7 @@ public:
 				stopwatch.Reset();
 				stopwatch.Start();
 				waitforleaving = false;
+				button1 = true;
 			}
 			if(stopwatch.Get() >= .25 || waitforleaving == true){
 				if(stopwatch.Get() >= .5 || waitforleaving == true){
@@ -417,8 +426,9 @@ public:
 				stopwatch.Stop();
 			}
 			//Makes 1 time button work
-			if(stick2.GetRawButton(1)){
+			if(button1){
 				firebutton = true;
+				button1 = false;
 			}
 			else{
 				firebutton = false;
