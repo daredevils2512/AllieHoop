@@ -107,7 +107,7 @@ public:
 		leftWheels(2,1,2,2),
 		rightWheels(1,1,1,2),
 		bottomWheels(2,5,2,6),
-		flywheelspeed(3,.005,.0001,&bottomWheels,&bottomWheelsMotor),
+		flywheelspeed(3,0.005,0.0001,&bottomWheels,&bottomWheelsMotor),
 		stopwatch(),
 		stopwatch1(),
 		camera(AxisCamera::GetInstance("192.168.0.2")),
@@ -136,10 +136,10 @@ public:
 			autostate = 1;
 			}
 		}
-			Wait(.5);//Begin...Shoot First Ball
+			Wait(0.5);//Begin...Shoot First Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
-			Wait(.25);
+			Wait(0.25);
 			launcherOut.Set(true);
 			launcherIn.Set(false);
 			wheelsReady = false;//End...Shoot First Ball
@@ -152,10 +152,10 @@ public:
 				autostate = 2;
 				}
 			}
-			Wait(.5);//Begin...Shoot Second Ball
+			Wait(0.5);//Begin...Shoot Second Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
-			Wait(.25);
+			Wait(0.25);
 			launcherOut.Set(true);
 			launcherIn.Set(false);
 			wheelsReady = false;//End...Shoo Second Ball
@@ -164,7 +164,7 @@ public:
 				if(leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690){
 					autostate = 3;
 				}
-				myRobot.TankDrive(.5, (leftWheels.Get() - rightWheels.Get())*.001 + .5);
+				myRobot.TankDrive(0.5, (leftWheels.Get() - rightWheels.Get())*0.001 + 0.5);
 				}//End...Drive to Bridge
 			}
 		stopwatch.Reset();
@@ -196,7 +196,7 @@ public:
 					autostate = 5;
 				}
 				if(!scoopUp.Get()){
-					scoopMotor.Set(-.6);
+					scoopMotor.Set(-0.6);
 				}
 				else{
 					scoopMotor.Set(0);
@@ -217,31 +217,31 @@ public:
 		{
 			//Sensitivity of Joystick
 			//X
-			if(stick1.GetX() >= .05){
-				xOutput = pow((stick1.GetX()*.05), 2);
+			if(stick1.GetX() >= 0.05){
+				xOutput = pow((stick1.GetX()*0.05), 2);
 			}
-			else if(stick1.GetX() <= -.05){
-				xOutput = pow((stick1.GetX()*.05), 2)*-1;
+			else if(stick1.GetX() <= -0.05){
+				xOutput = pow((stick1.GetX()*0.05), 2)*-1;
 			}
 			else{
 				xOutput = 0;
 			}
 			//Y
-			if(stick1.GetY() >= .05){
-				yOutput = pow((stick1.GetY()*.05), 2);
+			if(stick1.GetY() >= 0.05){
+				yOutput = pow((stick1.GetY()*0.05), 2);
 			}
-			else if(stick1.GetY() <= -.05){
-				yOutput = pow((stick1.GetY()*.05), 2)*-1;
+			else if(stick1.GetY() <= -0.05){
+				yOutput = pow((stick1.GetY()*0.05), 2)*-1;
 			}
 			else{
 				yOutput = 0;
 			}
 			//Twist
-			if(stick1.GetTwist() >= .05){
-				twistOutput = pow((stick1.GetTwist()*.05), 2);
+			if(stick1.GetTwist() >= 0.05){
+				twistOutput = pow((stick1.GetTwist()*0.05), 2);
 			}
-			else if(stick1.GetX() <= -.05){
-				twistOutput = pow((stick1.GetTwist()*.05), 2)*-1;
+			else if(stick1.GetX() <= -0.05){
+				twistOutput = pow((stick1.GetTwist()*0.05), 2)*-1;
 			}
 			else{
 				twistOutput = 0;
@@ -291,14 +291,14 @@ public:
 						scoopMotorValue = 1;
 					}
 					else{
-						scoopMotorValue = .4;
+						scoopMotorValue = 0.4;
 					}
 				}
 				else if(scoopUp.Get()){
 					scoopMotorValue = 0;
 				}
 				else{
-					scoopMotorValue = -.85;
+					scoopMotorValue = -0.85;
 				}
 			}
 			else{
@@ -308,7 +308,7 @@ public:
 					scoopMotorValue = 0;
 					}
 					else{
-						scoopMotorValue = .6;
+						scoopMotorValue = 0.6;
 					}
 				}
 				else if(stick1.GetRawButton(12)){
@@ -316,7 +316,7 @@ public:
 						scoopMotorValue = 0;
 					}
 					else{
-						scoopMotorValue = -.6;
+						scoopMotorValue = -0.6;
 					}
 				}
 				else{
@@ -401,8 +401,8 @@ public:
 				waitForLeaving = false;
 				button1 = true;
 			}
-			if(stopwatch.Get() >= .25 || waitForLeaving == true){
-				if(stopwatch.Get() >= .5 || waitForLeaving == true){
+			if(stopwatch.Get() >= 0.25 || waitForLeaving == true){
+				if(stopwatch.Get() >= 0.5 || waitForLeaving == true){
 					launcherOutSet = false;
 					launcherInSet = false;
 				}
