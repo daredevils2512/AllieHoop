@@ -26,7 +26,6 @@ class RobotDemo : public SimpleRobot
 	bool waitForLeaving;
 	bool fireButton;
 	bool flywheelsOn;
-	bool wheelsReady;
 	bool autoscoop;
 	bool runBrush;
 	bool ballInTop;
@@ -79,7 +78,6 @@ public:
 		waitForLeaving(true),
 		fireButton(false),
 		flywheelsOn(false),
-		wheelsReady(false),
 		autoscoop(false),
 		runBrush(false),
 		ballInTop(false),
@@ -136,13 +134,13 @@ public:
 			autostate = 1;
 			}
 		}
-			Wait(0.5);//Begin...Shoot First Ball
+		    //Begin...Shoot First Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
 			Wait(0.25);
 			launcherOut.Set(true);
 			launcherIn.Set(false);
-			wheelsReady = false;//End...Shoot First Ball
+			//End...Shoot First Ball
 			elevator.Set(Relay::kOn);//Begin...Run Elevator
 			Wait(2);
 			elevator.Set(Relay::kOff);//End...Run Elevator
@@ -152,13 +150,12 @@ public:
 				autostate = 2;
 				}
 			}
-			Wait(0.5);//Begin...Shoot Second Ball
+			//Begin...Shoot Second Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
 			Wait(0.25);
 			launcherOut.Set(true);
 			launcherIn.Set(false);
-			wheelsReady = false;//End...Shoo Second Ball
 		if(stick2.GetThrottle() > 2){//Begin...Drive to bridge
 			while(autostate == 2){
 				if(leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690){
