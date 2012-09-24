@@ -9,7 +9,24 @@
 	
 class RobotDemo : public SimpleRobot
 {
-
+	// Joystick 1 buttons
+	static const UINT32 GRIPPYS_DOWN = 2;
+	static const UINT32 SCOOP_BRIDGE = 9;
+	static const UINT32 SCOOP_BALLS = 7;
+	static const UINT32 SCOOP_DOWN = 11;
+	static const UINT32 SCOOP_UP = 12;
+	
+	// Joystick 2 buttons
+	static const UINT32 FIRE_BUTTON = 1;
+	static const UINT32 ELEVATOR_FOWARD = 11;
+	static const UINT32 ELEVATOR_REVERSE = 10;
+	static const UINT32 KEY_BUTTON = 3;
+	static const UINT32 REDUCE_FLYWHEEL_SPEED = 4;
+	static const UINT32 INCREASE_FLYWHEEL_SPEED = 5;
+	static const UINT32 FLYWHEELS_ON = 9;
+	static const UINT32 FLYWHEELS_OFF = 6;
+	static const UINT32 RUN_BRUSH_MOTOR = 8;
+	
 	static const int fender = 1250;
 	static const int key = 2050;
 	int autostate;
@@ -250,7 +267,7 @@ public:
 				twistOutput = twistOutput/1.5;
 			}
 			//Grippy Deployment
-			if(stick1.GetRawButton(2)){
+			if(stick1.GetRawButton(GRIPPYS_DOWN)){
 				xOutput = 0;
 				wheelsDown.Set(true);
 			}
@@ -260,13 +277,13 @@ public:
 			//Drive with Mecanum style
 			myRobot.MecanumDrive_Cartesian(xOutput, yOutput, twistOutput);
 			//checks for current scoop mode
-			if(stick1.GetRawButton(12) || stick1.GetRawButton(11)){
+			if(stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)){
 				autoscoop = true;
 			}
-			else if(stick1.GetRawButton(7) || stick1.GetRawButton(9)){
+			else if(stick1.GetRawButton(SCOOP_DOWN) || stick1.GetRawButton(SCOOP_UP)){
 				autoscoop = false;
 			}
-			if(stick1.GetRawButton(2)){
+			if(stick1.GetRawButton(GRIPPYS_DOWN)){
 				wheelsDown.Set(true);
 			}
 			else{
@@ -277,14 +294,14 @@ public:
 				if(scoopUp.Get()){
 					runBrush = false;
 				}
-				else if(stick1.GetRawButton(7)){
+				else if(stick1.GetRawButton(SCOOP_BALLS)){
 					runBrush = true;
 				}
-				if(stick1.GetRawButton(7) || stick1.GetRawButton(9)){
+				if(stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)){
 					if(scoopDown.Get()){
 						scoopMotorValue = 0;
 					}
-					else if(stick1.GetRawButton(9)){
+					else if(stick1.GetRawButton(SCOOP_BRIDGE)){
 						scoopMotorValue = 1;
 					}
 					else{
@@ -300,7 +317,7 @@ public:
 			}
 			else{
 				//Manual scoop
-				if(stick1.GetRawButton(11)){
+				if(stick1.GetRawButton(SCOOP_DOWN)){
 					if(scoopDown.Get()){
 					scoopMotorValue = 0;
 					}
@@ -308,7 +325,7 @@ public:
 						scoopMotorValue = 0.6;
 					}
 				}
-				else if(stick1.GetRawButton(12)){
+				else if(stick1.GetRawButton(SCOOP_UP)){
 					if(scoopUp.Get()){
 						scoopMotorValue = 0;
 					}
@@ -319,7 +336,7 @@ public:
 				else{
 					scoopMotorValue = 0;	
 				}
-				if(stick2.GetRawButton(8)){
+				if(stick2.GetRawButton(RUN_BRUSH_MOTOR)){
 					runBrush = true;
 				}
 				else{
@@ -351,11 +368,11 @@ public:
 				ballInTop = false;
 			}
 			//Elevator
-			if(stick2.GetRawButton(10) || stick2.GetRawButton(11)){
-				if(stick2.GetRawButton(10)){
+			if(stick2.GetRawButton(ELEVATOR_REVERSE) || stick2.GetRawButton(ELEVATOR_FOWARD)){
+				if(stick2.GetRawButton(ELEVATOR_REVERSE)){
 					elevator.Set(Relay::kReverse);
 				}
-				else if(stick2.GetRawButton(11)){
+				else if(stick2.GetRawButton(ELEVATOR_FOWARD)){
 					elevator.Set(Relay::kForward);
 				}
 				else{
@@ -369,20 +386,20 @@ public:
 				elevator.Set(Relay::kOff);
 			}
 			//Flywheel speed
-			if(stick2.GetRawButton(3)){  
+			if(stick2.GetRawButton(KEY_BUTTON)){  
 				desiredFlywheelSpeed = key;
 			}
-			else if(stick2.GetRawButton(4)){
+			else if(stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED)){
 				desiredFlywheelSpeed = (desiredFlywheelSpeed - 100);
 			}
-			else if(stick2.GetRawButton(5)){
+			else if(stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED)){
 				desiredFlywheelSpeed = (desiredFlywheelSpeed + 100);
 			}
 			flywheelspeed.SetSetpoint(desiredFlywheelSpeed);
-			if(stick2.GetRawButton(9)){
+			if(stick2.GetRawButton(FLYWHEELS_ON)){
 				flywheelsOn = true;
 			}
-			else if(stick2.GetRawButton(6)){
+			else if(stick2.GetRawButton(FLYWHEELS_OFF)){
 				flywheelsOn = false;
 			}
 			if(flywheelsOn){
@@ -392,7 +409,7 @@ public:
 				bottomWheelsMotor.Set(0);
 			}
 			//Actuators
-			if(stick2.GetRawButton(1) && !fireButton){
+			if(stick2.GetRawButton(FIRE_BUTTON) && !fireButton){
 				stopwatch.Reset();
 				stopwatch.Start();
 				waitForLeaving = false;
