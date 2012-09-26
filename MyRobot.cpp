@@ -9,6 +9,48 @@
 	
 class RobotDemo : public SimpleRobot
 {
+	// Sidecars
+	static const UINT8 SCOOP_MOTOR_SIDECAR = 1;
+	static const UINT8 REAR_LEFT_MOTOR_SIDECAR = 2;
+	static const UINT8 REAR_RIGHT_MOTOR_SIDECAR = 1;
+	static const UINT8 FRONT_LEFT_MOTOR_SIDECAR = 2;
+	static const UINT8 FRONT_RIGHT_MOTOR_SIDECAR = 1;
+	static const UINT8 BRUSH_MOTOR_SIDECAR = 2;
+	static const UINT8 ELEVATOR_SIDECAR = 2;
+	static const UINT8 COMPRESSOR_SIDECAR = 1;
+	static const UINT8 BOTTOM_WHEELS_MOTOR_SIDECAR = 1;
+	static const UINT8 LAUNCHER_IN_SIDECAR = 1;
+	static const UINT8 LAUNCHER_OUT_SIDECAR = 1;
+	static const UINT8 WHEELS_DOWN_SIDECAR = 1;
+	static const UINT8 LOW_LIGHT_SENSOR_SIDECAR = 2;
+	static const UINT8 HIGH_LIGHT_SENSOR_SIDECAR = 2;
+	static const UINT8 SCOOP_UP_SIDECAR = 1;
+	static const UINT8 SCOOP_DOWN_SIDECAR = 1;
+	static const UINT8 COMPRESSOR_SWITCH_SIDECAR = 2;
+	static const UINT8 BOTTOM_WHEELS_ENCODER_SIDECAR_A = 2;
+	static const UINT8 BOTTOM_WHEELS_ENCODER_SIDECAR_B = 2;
+
+	// PWMS
+	static const UINT32 SCOOP_MOTOR_PWM = 5;
+	static const UINT32 REAR_LEFT_MOTOR_PWM = 2;
+	static const UINT32 REAR_RIGHT_MOTOR_PWM = 2;
+	static const UINT32 FRONT_LEFT_MOTOR_PWM = 1;
+	static const UINT32 FRONT_RIGHT_MOTOR_PWM = 1;
+	static const UINT32 BRUSH_MOTOR_PWM = 2;
+	static const UINT32 ELEVATOR_PWM = 1;
+	static const UINT32 COMPRESSOR_PWM = 4;
+	static const UINT32 BOTTOM_WHEELS_MOTOR_PWM = 8;
+	static const UINT32 LAUNCHER_IN_PWM = 3;
+	static const UINT32 LAUNCHER_OUT_PWM = 2;
+	static const UINT32 WHEELS_DOWN_PWM = 1;
+	static const UINT32 LOW_LIGHT_SENSOR_PWM = 7;
+	static const UINT32 HIGH_LIGHT_SENSOR_PWM = 8;
+	static const UINT32 SCOOP_UP_PWM = 3;		// LIMIT SWITCH
+	static const UINT32 SCOOP_DOWN_PWM = 4;// LIMIT SWITCH
+	static const UINT32 COMPRESSOR_SWITCH_PWM = 9;
+	static const UINT32 BOTTOM_WHEELS_ENCODER_PWM_A = 5;
+	static const UINT32 BOTTOM_WHEELS_ENCODER_PWM_B = 6;
+
 	// Joystick 1 buttons
 	static const UINT32 GRIPPYS_DOWN = 2;
 	static const UINT32 SCOOP_BRIDGE = 9;
@@ -102,26 +144,26 @@ public:
 		button1(false),
 		stick1(1),		// as they are declared above.
 		stick2(2),
-		scoopMotor(1,5),
-		rearLeftMotor(2,2),
-		rearRightMotor(1,2),//inverted
-		frontLeftMotor(2,1),
-		frontRightMotor(1,1),//inverted
-		brushMotor(2,2),
-		elevator(2,1),
-		compressor(1,4),
-		bottomWheelsMotor(1,8),
-		launcherIn(1,3),
-		launcherOut(1,2),
-		wheelsDown(1,1),
-		lowLightSensor(2,7),
-		highLightSensor(2,8),
-		scoopUp(1,3),
-		scoopDown(1,4),
-		compressorSwitch(2,9),
-		leftWheels(2,1,2,2),
-		rightWheels(1,1,1,2),
-		bottomWheels(2,5,2,6),
+		scoopMotor(SCOOP_MOTOR_SIDECAR,SCOOP_MOTOR_PWM),
+		rearLeftMotor(REAR_LEFT_MOTOR_SIDECAR,REAR_LEFT_MOTOR_PWM),
+		rearRightMotor(REAR_RIGHT_MOTOR_SIDECAR,REAR_RIGHT_MOTOR_PWM),//inverted
+		frontLeftMotor(FRONT_LEFT_MOTOR_SIDECAR,FRONT_LEFT_MOTOR_PWM),
+		frontRightMotor(FRONT_RIGHT_MOTOR_SIDECAR,FRONT_RIGHT_MOTOR_PWM),//inverted
+		brushMotor(BRUSH_MOTOR_SIDECAR,BRUSH_MOTOR_PWM),
+		elevator(ELEVATOR_SIDECAR,ELEVATOR_PWM),
+		compressor(COMPRESSOR_SIDECAR,COMPRESSOR_PWM),
+		bottomWheelsMotor(BOTTOM_WHEELS_MOTOR_SIDECAR,BOTTOM_WHEELS_MOTOR_PWM),
+		launcherIn(LAUNCHER_IN_SIDECAR,LAUNCHER_IN_PWM),
+		launcherOut(LAUNCHER_OUT_SIDECAR,LAUNCHER_OUT_PWM),
+		wheelsDown(WHEELS_DOWN_SIDECAR,WHEELS_DOWN_PWM),
+		lowLightSensor(LOW_LIGHT_SENSOR_SIDECAR,LOW_LIGHT_SENSOR_PWM),
+		highLightSensor(HIGH_LIGHT_SENSOR_SIDECAR,HIGH_LIGHT_SENSOR_PWM),
+		scoopUp(SCOOP_UP_SIDECAR,SCOOP_UP_PWM),
+		scoopDown(SCOOP_DOWN_SIDECAR,SCOOP_DOWN_PWM),
+		compressorSwitch(COMPRESSOR_SWITCH_SIDECAR,COMPRESSOR_SWITCH_PWM),
+		leftWheels(REAR_LEFT_MOTOR_SIDECAR,REAR_LEFT_MOTOR_PWM,FRONT_LEFT_MOTOR_SIDECAR,FRONT_LEFT_MOTOR_PWM),
+		rightWheels(REAR_RIGHT_MOTOR_SIDECAR,REAR_RIGHT_MOTOR_PWM,FRONT_RIGHT_MOTOR_SIDECAR,FRONT_RIGHT_MOTOR_PWM),
+		bottomWheels(BOTTOM_WHEELS_ENCODER_SIDECAR_A,BOTTOM_WHEELS_ENCODER_PWM_A,BOTTOM_WHEELS_ENCODER_SIDECAR_B,BOTTOM_WHEELS_ENCODER_PWM_B),
 		flywheelspeed(3,0.005,0.0001,&bottomWheels,&bottomWheelsMotor),
 		stopwatch(),
 		stopwatch1(),
