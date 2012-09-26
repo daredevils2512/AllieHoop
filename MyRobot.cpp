@@ -417,9 +417,6 @@ public:
 				else if(stick2.GetRawButton(ELEVATOR_FOWARD)){
 					elevator.Set(Relay::kForward);
 				}
-				else{
-					elevator.Set(Relay::kOff);
-				}
 			}
 			else if(ballsInLow > 0 || (ballsInHigh == 1 && ballsInLow > 0)){
 				elevator.Set(Relay::kForward);
