@@ -5,8 +5,8 @@
  * First iteration of Allie Hoop's program in C++
  */ 
 
-	
-	
+
+
 class RobotDemo : public SimpleRobot
 {
 	// Sidecars
@@ -57,7 +57,7 @@ class RobotDemo : public SimpleRobot
 	static const UINT32 SCOOP_BALLS = 7;
 	static const UINT32 SCOOP_DOWN = 11;
 	static const UINT32 SCOOP_UP = 12;
-	
+
 	// Joystick 2 buttons
 	static const UINT32 FIRE_BUTTON = 1;
 	static const UINT32 ELEVATOR_FOWARD = 11;
@@ -68,7 +68,7 @@ class RobotDemo : public SimpleRobot
 	static const UINT32 FLYWHEELS_ON = 9;
 	static const UINT32 FLYWHEELS_OFF = 6;
 	static const UINT32 RUN_BRUSH_MOTOR = 8;
-	
+
 	static const int fender = 1250;
 	static const int key = 2050;
 	int autostate;
@@ -119,7 +119,7 @@ class RobotDemo : public SimpleRobot
 	AxisCamera& camera;	
 	RobotDrive myRobot; // robot drive system
 
-	
+
 
 public:
 	RobotDemo(void):	//these must be intialized in the same order
@@ -186,7 +186,7 @@ public:
 		wheelsDown.Set(true);
 		leftWheels.Reset();
 		rightWheels.Reset();
-		
+
 		while(autostate == 0 && IsAutonomous()){
 			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
 			if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
@@ -194,7 +194,7 @@ public:
 			}
 		}
 		if(IsAutonomous()){
-		    //Begin...Shoot First Ball
+			//Begin...Shoot First Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
 			Wait(0.25);
@@ -205,9 +205,9 @@ public:
 			Wait(2);
 			elevator.Set(Relay::kOff);//End...Run Elevator
 			while(autostate == 1 && IsAutonomous()){
-			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
-			if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
-				autostate = 2;
+				bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
+				if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
+					autostate = 2;
 				}
 			}
 		}
@@ -225,8 +225,8 @@ public:
 					autostate = 3;
 				}
 				myRobot.TankDrive(0.5, (leftWheels.Get() - rightWheels.Get())*0.001 + 0.5);
-				}//End...Drive to Bridge
-			}
+			}//End...Drive to Bridge
+		}
 		stopwatch.Reset();
 		stopwatch.Start();
 		if (stick2.GetThrottle() > 2){ //Tip bridge
@@ -235,7 +235,7 @@ public:
 					autostate = 4;
 				}
 				if(!scoopDown.Get() && IsAutonomous()){
-				scoopMotor.Set(1);
+					scoopMotor.Set(1);
 				}
 				else{
 					scoopMotor.Set(0);
@@ -365,7 +365,7 @@ public:
 				//Manual scoop
 				if(stick1.GetRawButton(SCOOP_DOWN)){
 					if(scoopDown.Get()){
-					scoopMotorValue = 0;
+						scoopMotorValue = 0;
 					}
 					else{
 						scoopMotorValue = 0.6;
