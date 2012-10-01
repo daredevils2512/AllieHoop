@@ -187,12 +187,13 @@ public:
 		leftWheels.Reset();
 		rightWheels.Reset();
 		
-		while(autostate == 0){
-		bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
-		if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
-			autostate = 1;
+		while(autostate == 0 && IsAutonomous()){
+			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
+			if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
+				autostate = 1;
 			}
 		}
+		if(IsAutonomous()){
 		    //Begin...Shoot First Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
@@ -203,20 +204,23 @@ public:
 			elevator.Set(Relay::kOn);//Begin...Run Elevator
 			Wait(2);
 			elevator.Set(Relay::kOff);//End...Run Elevator
-			while(autostate == 1){
+			while(autostate == 1 && IsAutonomous()){
 			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
 			if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200){
 				autostate = 2;
 				}
 			}
+		}
+		if(IsAutonomous()){
 			//Begin...Shoot Second Ball
 			launcherIn.Set(true);
 			launcherOut.Set(false);
 			Wait(0.25);
 			launcherOut.Set(true);
 			launcherIn.Set(false);
+		}
 		if(stick2.GetThrottle() > 2){//Begin...Drive to bridge
-			while(autostate == 2){
+			while(autostate == 2 && IsAutonomous()){
 				if(leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690){
 					autostate = 3;
 				}
@@ -226,11 +230,11 @@ public:
 		stopwatch.Reset();
 		stopwatch.Start();
 		if (stick2.GetThrottle() > 2){ //Tip bridge
-			while(autostate == 3){
-				if(stopwatch.Get() >= 3){
+			while(autostate == 3 && IsAutonomous()){
+				if(stopwatch.Get() >= 3 && IsAutonomous()){
 					autostate = 4;
 				}
-				if(!scoopDown.Get()){
+				if(!scoopDown.Get() && IsAutonomous()){
 				scoopMotor.Set(1);
 				}
 				else{
@@ -241,12 +245,12 @@ public:
 		}
 		stopwatch.Stop();
 		stopwatch.Reset();
-		if(stick2.GetThrottle() > 2){
+		if(stick2.GetThrottle() > 2 && IsAutonomous()){
 			Wait(3);
 		}
 		stopwatch.Start();
-		if(stick2.GetThrottle() > 2){
-			while(autostate == 4){
+		if(stick2.GetThrottle() > 2 && IsAutonomous()){
+			while(autostate == 4 && IsAutonomous()){
 				if(stopwatch.Get() >= 2 ){
 					scoopMotor.Set(0);
 					autostate = 5;
@@ -486,4 +490,3 @@ public:
 };
 
 START_ROBOT_CLASS(RobotDemo);
-
