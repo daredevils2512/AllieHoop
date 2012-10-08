@@ -300,7 +300,7 @@ public:
 			if(stick1.GetTwist() >= 0.05){
 				twistOutput = pow((stick1.GetTwist()*0.05), 2);
 			}
-			else if(stick1.GetX() <= -0.05){
+			else if(stick1.GetTwist() <= -0.05){
 				twistOutput = pow((stick1.GetTwist()*0.05), 2)*-1;
 			}
 			else{
