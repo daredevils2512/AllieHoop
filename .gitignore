@@ -1,3 +1,6 @@
 
 *.bak
 /PPC603gnu
+/.wrproject
+/.cproject
+/.project
