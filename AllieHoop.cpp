@@ -75,8 +75,9 @@ void RobotDemo::Autonomous(void)
 	rightWheels.Reset();
 
 	while (autostate == 0 && IsAutonomous()) {
-		bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
-		if(flywheelspeed.Get()<= 2550 && flywheelspeed.Get() >= 2200) {
+		float currentFlywheelSpeed = flywheelspeed.Get();
+		bottomWheelsMotor.Set(currentFlywheelSpeed / 3000);
+		if (currentFlywheelSpeed <= 2550 && currentFlywheelSpeed >= 2200) {
 			autostate = 1;
 		}
 	}
@@ -92,8 +93,9 @@ void RobotDemo::Autonomous(void)
 		Wait(2);
 		elevator.Set(Relay::kOff);//End...Run Elevator
 		while (autostate == 1 && IsAutonomous()) {
-			bottomWheelsMotor.Set((flywheelspeed.Get()) / 3000);
-			if (flywheelspeed.Get() <= 2550 && flywheelspeed.Get() >= 2200) {
+			float currentFlywheelSpeed = flywheelspeed.Get();
+			bottomWheelsMotor.Set(currentFlywheelSpeed / 3000);
+			if (currentFlywheelSpeed <= 2550 && currentFlywheelSpeed >= 2200) {
 				autostate = 2;
 			}
 		}
@@ -164,31 +166,34 @@ void RobotDemo::OperatorControl(void)
 	{
 		//Sensitivity of Joystick
 		//X
-		if (stick1.GetX() >= 0.05) {
-			xOutput = pow((stick1.GetX()*0.05), 2);
+		float xInput = stick1.GetX();
+		if (xInput >= 0.05) {
+			xOutput = pow((xInput*0.05), 2);
 		}
-		else if (stick1.GetX() <= -0.05) {
-			xOutput = pow((stick1.GetX()*0.05), 2)*-1;
+		else if (xInput <= -0.05) {
+			xOutput = pow((xInput*0.05), 2)*-1;
 		}
 		else {
 			xOutput = 0;
 		}
 		//Y
-		if (stick1.GetY() >= 0.05) {
-			yOutput = pow((stick1.GetY()*0.05), 2);
+		float yInput = stick1.GetY();
+		if (yInput >= 0.05) {
+			yOutput = pow((yInput*0.05), 2);
 		}
-		else if (stick1.GetY() <= -0.05) {
-			yOutput = pow((stick1.GetY()*0.05), 2)*-1;
+		else if (yInput <= -0.05) {
+			yOutput = pow((yInput*0.05), 2)*-1;
 		}
 		else {
 			yOutput = 0;
 		}
 		//Twist
-		if (stick1.GetTwist() >= 0.05) {
-			twistOutput = pow((stick1.GetTwist()*0.05), 2);
+		float twistInput = stick1.GetTwist();
+		if (twistInput >= 0.05) {
+			twistOutput = pow((twistInput*0.05), 2);
 		}
-		else if (stick1.GetTwist() <= -0.05) {
-			twistOutput = pow((stick1.GetTwist()*0.05), 2)*-1;
+		else if (twistInput <= -0.05) {
+			twistOutput = pow((twistInput*0.05), 2)*-1;
 		}
 		else {
 			twistOutput = 0;
@@ -301,13 +306,11 @@ void RobotDemo::OperatorControl(void)
 			ballInTop = false;
 		}
 		//Elevator
-		if (stick2.GetRawButton(ELEVATOR_REVERSE) || stick2.GetRawButton(ELEVATOR_FOWARD)) {
-			if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
-				elevator.Set(Relay::kReverse);
-			}
-			else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
-				elevator.Set(Relay::kForward);
-			}
+		if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
+			elevator.Set(Relay::kReverse);
+		}
+		else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
+			elevator.Set(Relay::kForward);
 		}
 		else if (ballsInLow > 0 || (ballsInHigh == 1 && ballsInLow > 0)) {
 			elevator.Set(Relay::kForward);
@@ -333,7 +336,7 @@ void RobotDemo::OperatorControl(void)
 			flywheelsOn = false;
 		}
 		if (flywheelsOn) {
-			bottomWheelsMotor.Set((flywheelspeed.Get())/3000);
+			bottomWheelsMotor.Set(flywheelspeed.Get() / 3000);
 		}
 		else {
 			bottomWheelsMotor.Set(0);
