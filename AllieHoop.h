@@ -120,7 +120,10 @@ class RobotDemo : public SimpleRobot
 	AxisCamera& camera;	
 	RobotDrive myRobot; // robot drive system
 
-
+	void Drive();
+	void Scoop();
+	void Elevator();
+	void Shoot();
 
 public:
 	RobotDemo(void);

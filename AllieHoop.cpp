@@ -165,217 +165,238 @@ void RobotDemo::OperatorControl(void)
 	GetWatchdog().SetEnabled(false);
 	while (IsOperatorControl())
 	{
-		//Sensitivity of Joystick
-		//X
+		Drive();
+		Scoop();
+		Elevator();
+		Shoot();
+	}
+}
+
+void RobotDemo::Drive()
+{
+	//Sensitivity of Joystick
+	//X
 		float xInput = stick1.GetX();
 		if (xInput >= 0.05) {
 			xOutput = pow((xInput*0.05f), 2);
-		}
+	}
 		else if (xInput <= -0.05) {
 			xOutput = pow((xInput*0.05f), 2)*-1;
-		}
-		else {
-			xOutput = 0;
-		}
-		//Y
+	}
+	else {
+		xOutput = 0;
+	}
+	//Y
 		float yInput = stick1.GetY();
 		if (yInput >= 0.05) {
 			yOutput = pow((yInput*0.05f), 2);
-		}
+	}
 		else if (yInput <= -0.05) {
 			yOutput = pow((yInput*0.05f), 2)*-1;
-		}
-		else {
-			yOutput = 0;
-		}
-		//Twist
+	}
+	else {
+		yOutput = 0;
+	}
+	//Twist
 		float twistInput = stick1.GetTwist();
 		if (twistInput >= 0.05) {
 			twistOutput = pow((twistInput*0.05f), 2);
-		}
+	}
 		else if (twistInput <= -0.05) {
 			twistOutput = pow((twistInput*0.05f), 2)*-1;
+	}
+	else {
+		twistOutput = 0;
+	}
+	if (stick1.GetThrottle() >= 0) {
+		twistOutput = twistOutput/2;
+	}
+	else {
+		twistOutput = twistOutput/1.5;
+	}
+	//Grippy Deployment
+	if (stick1.GetRawButton(GRIPPYS_DOWN)) {
+		xOutput = 0;
+		wheelsDown.Set(true);
+	}
+	else {
+		wheelsDown.Set(false);
+	}
+	//Drive with Mecanum style
+	myRobot.MecanumDrive_Cartesian(xOutput, yOutput, twistOutput);
+}
+
+void RobotDemo::Scoop()
+{
+	//checks for current scoop mode
+	if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
+		autoscoop = true;
+	}
+	else if (stick1.GetRawButton(SCOOP_DOWN) || stick1.GetRawButton(SCOOP_UP)) {
+		autoscoop = false;
+	}
+	if (stick1.GetRawButton(GRIPPYS_DOWN)) {
+		wheelsDown.Set(true);
+	}
+	else {
+		wheelsDown.Set(false);
+	}
+	//Autoscoop
+	if (autoscoop == true) {
+		if (scoopUp.Get()) {
+			runBrush = false;
 		}
-		else {
-			twistOutput = 0;
+		else if (stick1.GetRawButton(SCOOP_BALLS)) {
+			runBrush = true;
 		}
-		if (stick1.GetThrottle() >= 0) {
-			twistOutput = twistOutput/2;
-		}
-		else {
-			twistOutput = twistOutput/1.5;
-		}
-		//Grippy Deployment
-		if (stick1.GetRawButton(GRIPPYS_DOWN)) {
-			xOutput = 0;
-			wheelsDown.Set(true);
-		}
-		else {
-			wheelsDown.Set(false);
-		}
-		//Drive with Mecanum style
-		myRobot.MecanumDrive_Cartesian(xOutput, yOutput, twistOutput);
-		//checks for current scoop mode
 		if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
-			autoscoop = true;
+			if (scoopDown.Get()) {
+				scoopMotorValue = 0;
+			}
+			else if (stick1.GetRawButton(SCOOP_BRIDGE)) {
+				scoopMotorValue = 1;
+			}
+			else {
+					scoopMotorValue = 0.4f;
+			}
 		}
-		else if (stick1.GetRawButton(SCOOP_DOWN) || stick1.GetRawButton(SCOOP_UP)) {
-			autoscoop = false;
-		}
-		if (stick1.GetRawButton(GRIPPYS_DOWN)) {
-			wheelsDown.Set(true);
+		else if (scoopUp.Get()) {
+			scoopMotorValue = 0;
 		}
 		else {
-			wheelsDown.Set(false);
+				scoopMotorValue = -0.85f;
 		}
-		//Autoscoop
-		if (autoscoop == true) {
-			if (scoopUp.Get()) {
-				runBrush = false;
-			}
-			else if (stick1.GetRawButton(SCOOP_BALLS)) {
-				runBrush = true;
-			}
-			if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
-				if (scoopDown.Get()) {
-					scoopMotorValue = 0;
-				}
-				else if (stick1.GetRawButton(SCOOP_BRIDGE)) {
-					scoopMotorValue = 1;
-				}
-				else {
-					scoopMotorValue = 0.4f;
-				}
-			}
-			else if (scoopUp.Get()) {
+	}
+	else {
+		//Manual scoop
+		if (stick1.GetRawButton(SCOOP_DOWN)) {
+			if (scoopDown.Get()) {
 				scoopMotorValue = 0;
 			}
 			else {
-				scoopMotorValue = -0.85f;
-			}
-		}
-		else {
-			//Manual scoop
-			if (stick1.GetRawButton(SCOOP_DOWN)) {
-				if (scoopDown.Get()) {
-					scoopMotorValue = 0;
-				}
-				else {
 					scoopMotorValue = 0.6f;
-				}
 			}
-			else if (stick1.GetRawButton(SCOOP_UP)) {
-				if (scoopUp.Get()) {
-					scoopMotorValue = 0;
-				}
-				else {
+		}
+		else if (stick1.GetRawButton(SCOOP_UP)) {
+			if (scoopUp.Get()) {
+				scoopMotorValue = 0;
+			}
+			else {
 					scoopMotorValue = -0.6f;
-				}
 			}
-			else {
-				scoopMotorValue = 0;	
-			}
-			if (stick2.GetRawButton(RUN_BRUSH_MOTOR)) {
-				runBrush = true;
-			}
-			else {
-				runBrush = false;
-			}
-		}
-		//Ball Position
-		if (!previousLowLightSensorValue && lowLightSensor.Get()) {
-			ballsInLow++;
-			previousLowLightSensorValue = true ;
-		}
-		if (previousLowLightSensorValue && !lowLightSensor.Get()) {
-			previousLowLightSensorValue = false;
-		}
-		if (highLightSensor.Get()) {
-			stopwatch1.Reset();
-			stopwatch1.Start();
-		}
-		if (stopwatch1.Get() >= 2.5) {
-			ballsInHigh++;
-			ballsInLow--;
-			stopwatch1.Stop();
-			stopwatch1.Reset();
-		}
-		if (ballsInHigh > 0) {
-			ballInTop = true;
 		}
 		else {
-			ballInTop = false;
+			scoopMotorValue = 0;	
 		}
-		//Elevator
+		if (stick2.GetRawButton(RUN_BRUSH_MOTOR)) {
+			runBrush = true;
+		}
+		else {
+			runBrush = false;
+		}
+	}
+}
+
+void RobotDemo::Elevator()
+{
+	//Ball Position
+	if (!previousLowLightSensorValue && lowLightSensor.Get()) {
+		ballsInLow++;
+		previousLowLightSensorValue = true ;
+	}
+	if (previousLowLightSensorValue && !lowLightSensor.Get()) {
+		previousLowLightSensorValue = false;
+	}
+	if (highLightSensor.Get()) {
+		stopwatch1.Reset();
+		stopwatch1.Start();
+	}
+	if (stopwatch1.Get() >= 2.5) {
+		ballsInHigh++;
+		ballsInLow--;
+		stopwatch1.Stop();
+		stopwatch1.Reset();
+	}
+	if (ballsInHigh > 0) {
+		ballInTop = true;
+	}
+	else {
+		ballInTop = false;
+	}
+	//Elevator
 		if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
 			elevator.Set(Relay::kReverse);
 		}
 		else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
 			elevator.Set(Relay::kForward);
 		}
-		else if (ballsInLow > 0 || (ballsInHigh == 1 && ballsInLow > 0)) {
-			elevator.Set(Relay::kForward);
-		}
-		else {
-			elevator.Set(Relay::kOff);
-		}
-		//Flywheel speed
-		if (stick2.GetRawButton(KEY_BUTTON)) {  
-			desiredFlywheelSpeed = key;
-		}
-		else if (stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED)) {
-			desiredFlywheelSpeed = (desiredFlywheelSpeed - 100);
-		}
-		else if (stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED)) {
-			desiredFlywheelSpeed = (desiredFlywheelSpeed + 100);
-		}
-		flywheelspeed.SetSetpoint(desiredFlywheelSpeed);
-		if (stick2.GetRawButton(FLYWHEELS_ON)) {
-			flywheelsOn = true;
-		}
-		else if (stick2.GetRawButton(FLYWHEELS_OFF)) {
-			flywheelsOn = false;
-		}
-		if (flywheelsOn) {
+	else if (ballsInLow > 0 || (ballsInHigh == 1 && ballsInLow > 0)) {
+		elevator.Set(Relay::kForward);
+	}
+	else {
+		elevator.Set(Relay::kOff);
+	}
+}
+
+
+void RobotDemo::Shoot()
+{
+	//Flywheel speed
+	if (stick2.GetRawButton(KEY_BUTTON)) {  
+		desiredFlywheelSpeed = key;
+	}
+	else if (stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED)) {
+		desiredFlywheelSpeed = (desiredFlywheelSpeed - 100);
+	}
+	else if (stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED)) {
+		desiredFlywheelSpeed = (desiredFlywheelSpeed + 100);
+	}
+	flywheelspeed.SetSetpoint(desiredFlywheelSpeed);
+	if (stick2.GetRawButton(FLYWHEELS_ON)) {
+		flywheelsOn = true;
+	}
+	else if (stick2.GetRawButton(FLYWHEELS_OFF)) {
+		flywheelsOn = false;
+	}
+	if (flywheelsOn) {
 			bottomWheelsMotor.Set(flywheelspeed.Get() / 3000);
-		}
-		else {
-			bottomWheelsMotor.Set(0);
-		}
-		//Actuators
-		if (stick2.GetRawButton(FIRE_BUTTON) && !fireButton) {
-			stopwatch.Reset();
-			stopwatch.Start();
-			waitForLeaving = false;
-			button1 = true;
-		}
-		if (stopwatch.Get() >= 0.25 || waitForLeaving == true) {
-			if (stopwatch.Get() >= 0.5 || waitForLeaving == true) {
-				launcherOutSet = false;
-				launcherInSet = false;
-			}
-			else {
-				launcherOutSet = true;
-				launcherInSet = false;
-			}
-		}
-		else {
+	}
+	else {
+		bottomWheelsMotor.Set(0);
+	}
+	//Actuators
+	if (stick2.GetRawButton(FIRE_BUTTON) && !fireButton) {
+		stopwatch.Reset();
+		stopwatch.Start();
+		waitForLeaving = false;
+		button1 = true;
+	}
+	if (stopwatch.Get() >= 0.25 || waitForLeaving == true) {
+		if (stopwatch.Get() >= 0.5 || waitForLeaving == true) {
 			launcherOutSet = false;
-			launcherInSet = true;
-		}
-		launcherIn.Set(launcherInSet);
-		launcherOut.Set(launcherOutSet);
-		if (stopwatch.Get() >= 5) {
-			stopwatch.Stop();
-		}
-		//Makes 1 time button work
-		if (button1) {
-			fireButton = true;
-			button1 = false;
+			launcherInSet = false;
 		}
 		else {
-			fireButton = false;
+			launcherOutSet = true;
+			launcherInSet = false;
 		}
+	}
+	else {
+		launcherOutSet = false;
+		launcherInSet = true;
+	}
+	launcherIn.Set(launcherInSet);
+	launcherOut.Set(launcherOutSet);
+	if (stopwatch.Get() >= 5) {
+		stopwatch.Stop();
+	}
+	//Makes 1 time button work
+	if (button1) {
+		fireButton = true;
+		button1 = false;
+	}
+	else {
+		fireButton = false;
 	}
 }
 
