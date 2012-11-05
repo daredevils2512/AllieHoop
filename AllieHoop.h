@@ -70,8 +70,8 @@ class RobotDemo : public SimpleRobot
 	static const UINT32 FLYWHEELS_OFF = 6;
 	static const UINT32 RUN_BRUSH_MOTOR = 8;
 
-	static const int fender = 1250;
-	static const int key = 2050;
+	static const float fender ;
+	static const float key ;
 	int autostate;
 	int ballsInHigh;
 	int ballsInLow;

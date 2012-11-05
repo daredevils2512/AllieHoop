@@ -6,7 +6,8 @@
  */ 
 
 
-
+const float RobotDemo::fender = 1250;
+const float RobotDemo::key = 2050;
 
 
 RobotDemo::RobotDemo(void):	//these must be intialized in the same order
@@ -168,10 +169,10 @@ void RobotDemo::OperatorControl(void)
 		//X
 		float xInput = stick1.GetX();
 		if (xInput >= 0.05) {
-			xOutput = pow((xInput*0.05), 2);
+			xOutput = pow((xInput*0.05f), 2);
 		}
 		else if (xInput <= -0.05) {
-			xOutput = pow((xInput*0.05), 2)*-1;
+			xOutput = pow((xInput*0.05f), 2)*-1;
 		}
 		else {
 			xOutput = 0;
@@ -179,10 +180,10 @@ void RobotDemo::OperatorControl(void)
 		//Y
 		float yInput = stick1.GetY();
 		if (yInput >= 0.05) {
-			yOutput = pow((yInput*0.05), 2);
+			yOutput = pow((yInput*0.05f), 2);
 		}
 		else if (yInput <= -0.05) {
-			yOutput = pow((yInput*0.05), 2)*-1;
+			yOutput = pow((yInput*0.05f), 2)*-1;
 		}
 		else {
 			yOutput = 0;
@@ -190,10 +191,10 @@ void RobotDemo::OperatorControl(void)
 		//Twist
 		float twistInput = stick1.GetTwist();
 		if (twistInput >= 0.05) {
-			twistOutput = pow((twistInput*0.05), 2);
+			twistOutput = pow((twistInput*0.05f), 2);
 		}
 		else if (twistInput <= -0.05) {
-			twistOutput = pow((twistInput*0.05), 2)*-1;
+			twistOutput = pow((twistInput*0.05f), 2)*-1;
 		}
 		else {
 			twistOutput = 0;
@@ -243,14 +244,14 @@ void RobotDemo::OperatorControl(void)
 					scoopMotorValue = 1;
 				}
 				else {
-					scoopMotorValue = 0.4;
+					scoopMotorValue = 0.4f;
 				}
 			}
 			else if (scoopUp.Get()) {
 				scoopMotorValue = 0;
 			}
 			else {
-				scoopMotorValue = -0.85;
+				scoopMotorValue = -0.85f;
 			}
 		}
 		else {
@@ -260,7 +261,7 @@ void RobotDemo::OperatorControl(void)
 					scoopMotorValue = 0;
 				}
 				else {
-					scoopMotorValue = 0.6;
+					scoopMotorValue = 0.6f;
 				}
 			}
 			else if (stick1.GetRawButton(SCOOP_UP)) {
@@ -268,7 +269,7 @@ void RobotDemo::OperatorControl(void)
 					scoopMotorValue = 0;
 				}
 				else {
-					scoopMotorValue = -0.6;
+					scoopMotorValue = -0.6f;
 				}
 			}
 			else {
