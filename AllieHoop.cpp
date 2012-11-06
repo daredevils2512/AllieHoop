@@ -242,18 +242,22 @@ void RobotDemo::Scoop()
 		wheelsDown.Set(false);
 	}
 	//Autoscoop
+	
+	bool scoopBallsButton = stick1.GetRawButton(SCOOP_BALLS);
+	bool scoopBridgeButton = stick1.GetRawButton(SCOOP_BRIDGE);
+	
 	if (autoscoop == true) {
 		if (scoopUp.Get()) {
 			runBrush = false;
 		}
-		else if (stick1.GetRawButton(SCOOP_BALLS)) {
+		else if (scoopBallsButton) {
 			runBrush = true;
 		}
-		if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
+		if (scoopBallsButton || scoopBridgeButton) {
 			if (scoopDown.Get()) {
 				scoopMotorValue = 0;
 			}
-			else if (stick1.GetRawButton(SCOOP_BRIDGE)) {
+			else if (scoopBridgeButton) {
 				scoopMotorValue = 1;
 			}
 			else {
@@ -293,6 +297,13 @@ void RobotDemo::Scoop()
 		}
 		else {
 			runBrush = false;
+		}
+		//Run Brush Motor
+		if (runBrush){
+			brushMotor.Set(Relay::kOn);
+		}
+		else {
+			brushMotor.Set(Relay::kOff);
 		}
 	}
 }
