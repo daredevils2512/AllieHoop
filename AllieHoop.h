@@ -124,6 +124,7 @@ class RobotDemo : public SimpleRobot
 	void Scoop();
 	void Elevator();
 	void Shoot();
+	float ConvertAxis(float input);
 
 public:
 	RobotDemo(void);

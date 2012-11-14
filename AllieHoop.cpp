@@ -176,38 +176,15 @@ void RobotDemo::Drive()
 {
 	//Sensitivity of Joystick
 	//X
-		float xInput = stick1.GetX();
-		if (xInput >= 0.05) {
-			xOutput = pow((xInput*0.05f), 2);
-	}
-		else if (xInput <= -0.05) {
-			xOutput = pow((xInput*0.05f), 2)*-1;
-	}
-	else {
-		xOutput = 0;
-	}
+	float xInput = stick1.GetX();
+	xOutput = ConvertAxis(xInput);
 	//Y
-		float yInput = stick1.GetY();
-		if (yInput >= 0.05) {
-			yOutput = pow((yInput*0.05f), 2);
-	}
-		else if (yInput <= -0.05) {
-			yOutput = pow((yInput*0.05f), 2)*-1;
-	}
-	else {
-		yOutput = 0;
-	}
+	float yInput = stick1.GetY();
+	yOutput = ConvertAxis(yInput);
 	//Twist
-		float twistInput = stick1.GetTwist();
-		if (twistInput >= 0.05) {
-			twistOutput = pow((twistInput*0.05f), 2);
-	}
-		else if (twistInput <= -0.05) {
-			twistOutput = pow((twistInput*0.05f), 2)*-1;
-	}
-	else {
-		twistOutput = 0;
-	}
+	float twistInput = stick1.GetTwist();
+	twistOutput = ConvertAxis(twistInput);
+		
 	if (stick1.GetThrottle() >= 0) {
 		twistOutput = twistOutput/2;
 	}
@@ -224,6 +201,18 @@ void RobotDemo::Drive()
 	}
 	//Drive with Mecanum style
 	myRobot.MecanumDrive_Cartesian(xOutput, yOutput, twistOutput);
+}
+
+float RobotDemo::ConvertAxis(float input){
+	if (input >= 0.05) {
+		return pow((input*0.05f), 2);
+	}
+	else if (input <= -0.05) {
+		return pow((input*0.05f), 2)*-1;
+	}
+	else {
+		return 0;
+	}
 }
 
 void RobotDemo::Scoop()
