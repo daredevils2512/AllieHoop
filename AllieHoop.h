@@ -75,10 +75,6 @@ class RobotDemo : public SimpleRobot
 	int autostate;
 	int ballsInHigh;
 	int ballsInLow;
-	float xOutput;
-	float yOutput;
-	float twistOutput;
-	float desiredFlywheelSpeed;
 	float pidOutput;
 	float scoopMotorValue;
 	bool launcherOutSet;

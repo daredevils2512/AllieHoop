@@ -14,10 +14,6 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	autostate(0),
 	ballsInHigh(0), 
 	ballsInLow(0),
-	xOutput(0),
-	yOutput(0),
-	twistOutput(0),
-	desiredFlywheelSpeed(fender),
 	pidOutput(0),
 	scoopMotorValue(0),
 	launcherOutSet(false),
@@ -177,13 +173,13 @@ void RobotDemo::Drive()
 	//Sensitivity of Joystick
 	//X
 	float xInput = stick1.GetX();
-	xOutput = ConvertAxis(xInput);
+	float xOutput = ConvertAxis(xInput);
 	//Y
 	float yInput = stick1.GetY();
-	yOutput = ConvertAxis(yInput);
+	float yOutput = ConvertAxis(yInput);
 	//Twist
 	float twistInput = stick1.GetTwist();
-	twistOutput = ConvertAxis(twistInput);
+	float twistOutput = ConvertAxis(twistInput);
 		
 	if (stick1.GetThrottle() >= 0) {
 		twistOutput = twistOutput/2;
@@ -342,6 +338,9 @@ void RobotDemo::Elevator()
 void RobotDemo::Shoot()
 {
 	//Flywheel speed
+	
+	float desiredFlywheelSpeed = fender;
+	
 	if (stick2.GetRawButton(KEY_BUTTON)) {  
 		desiredFlywheelSpeed = key;
 	}
