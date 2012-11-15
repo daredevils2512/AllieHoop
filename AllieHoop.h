@@ -63,6 +63,7 @@ class RobotDemo : public SimpleRobot
 	static const UINT32 FIRE_BUTTON = 1;
 	static const UINT32 ELEVATOR_FOWARD = 11;
 	static const UINT32 ELEVATOR_REVERSE = 10;
+	static const UINT32 FENDER_BUTTON = 2;
 	static const UINT32 KEY_BUTTON = 3;
 	static const UINT32 REDUCE_FLYWHEEL_SPEED = 4;
 	static const UINT32 INCREASE_FLYWHEEL_SPEED = 5;

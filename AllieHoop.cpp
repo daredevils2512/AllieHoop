@@ -344,6 +344,9 @@ void RobotDemo::Shoot()
 	if (stick2.GetRawButton(KEY_BUTTON)) {  
 		desiredFlywheelSpeed = key;
 	}
+	else if (stick2.GetRawButton(FENDER_BUTTON)){
+		desiredFlywheelSpeed = fender;
+	}
 	else if (stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED)) {
 		desiredFlywheelSpeed = (desiredFlywheelSpeed - 100);
 	}
