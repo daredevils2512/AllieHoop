@@ -56,7 +56,7 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	//robotdrive function my accept speedcontoller memory locations as placeholders
 	//for motors themselves
 {
-	GetWatchdog().SetExpiration(0.1);
+	GetWatchdog().SetExpiration(10);
 	flywheelspeed.SetOutputRange(0, 3000);
 	myRobot.SetInvertedMotor(RobotDrive::kRearRightMotor, true);
 	myRobot.SetInvertedMotor(RobotDrive::kFrontRightMotor, true);
@@ -159,7 +159,7 @@ void RobotDemo::OperatorControl(void)
 {
 	wheelsDown.Set(false);
 	GetWatchdog().SetEnabled(false);
-	while (IsOperatorControl())
+	while (1 == 1)
 	{
 		Drive();
 		Scoop();
