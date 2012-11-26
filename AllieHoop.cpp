@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include "AllieHoop.h"
 
 /*
@@ -66,6 +67,7 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 
 void RobotDemo::Autonomous(void)
 {
+	cout << "Beginning Autonomous\n";
 	GetWatchdog().SetEnabled(false);
 	wheelsDown.Set(true);
 	leftWheels.Reset();
@@ -79,6 +81,7 @@ void RobotDemo::Autonomous(void)
 		}
 	}
 	if (IsAutonomous()) {
+		cout << "Begin..Shoot first ball\n";
 		//Begin...Shoot First Ball
 		launcherIn.Set(true);
 		launcherOut.Set(false);
@@ -98,6 +101,7 @@ void RobotDemo::Autonomous(void)
 		}
 	}
 	if (IsAutonomous()) {
+		cout << "Shoot second ball\n";
 		//Begin...Shoot Second Ball
 		launcherIn.Set(true);
 		launcherOut.Set(false);
@@ -106,16 +110,19 @@ void RobotDemo::Autonomous(void)
 		launcherIn.Set(false);
 	}
 	if (stick2.GetThrottle() > 2) {//Begin...Drive to bridge
+		cout << "begin driving to bridge\n";
 		while (autostate == 2 && IsAutonomous()) {
 			if (leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690) {
 				autostate = 3;
 			}
 			myRobot.TankDrive(0.5, (leftWheels.Get() - rightWheels.Get())*0.001 + 0.5);
+			cout << "Drive to bridge stopped\n";
 		}//End...Drive to Bridge
 	}
 	stopwatch.Reset();
 	stopwatch.Start();
 	if (stick2.GetThrottle() > 2) { //Tip bridge
+		cout << "Tipping bridge\n";
 		while (autostate == 3 && IsAutonomous()) {
 			if (stopwatch.Get() >= 3 && IsAutonomous()) {
 				autostate = 4;
@@ -152,6 +159,7 @@ void RobotDemo::Autonomous(void)
 	}
 	stopwatch.Stop();
 	stopwatch.Reset();
+	cout << "Tipping bridge ended\n";
 }//End...Tip bridge
 
 
