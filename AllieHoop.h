@@ -112,8 +112,7 @@ class RobotDemo : public SimpleRobot
 	Encoder bottomWheels;
 	PIDController flywheelspeed;
 	Timer stopwatch;
-	Timer stopwatch1;
-	AxisCamera& camera;	
+	Timer stopwatch1;	
 	RobotDrive myRobot; // robot drive system
 
 	void Drive();

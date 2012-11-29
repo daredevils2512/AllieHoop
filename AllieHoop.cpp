@@ -51,7 +51,6 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	flywheelspeed(3, 0.005, 0.0001, &bottomWheels, &bottomWheelsMotor),
 	stopwatch(),
 	stopwatch1(),
-	camera(AxisCamera::GetInstance("192.168.0.2")),
 	myRobot(&frontLeftMotor, &rearLeftMotor, &frontRightMotor, &rearRightMotor)
 	//robotdrive function my accept speedcontoller memory locations as placeholders
 	//for motors themselves
