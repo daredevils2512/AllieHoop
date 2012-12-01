@@ -165,6 +165,7 @@ void RobotDemo::Autonomous(void)
 
 void RobotDemo::OperatorControl(void)
 {
+	cout << "Begining Operator Control\n";
 	wheelsDown.Set(false);
 	GetWatchdog().SetEnabled(false);
 	while (1 == 1)
@@ -178,6 +179,7 @@ void RobotDemo::OperatorControl(void)
 
 void RobotDemo::Drive()
 {
+	cout << "Begening Drive Mode\n";
 	//Sensitivity of Joystick
 	//X
 	float xInput = stick1.GetX();
@@ -221,6 +223,7 @@ float RobotDemo::ConvertAxis(float input){
 
 void RobotDemo::Scoop()
 {
+	cout << "Starting Scoop\n";
 	//checks for current scoop mode
 	if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
 		autoscoop = true;
@@ -303,6 +306,7 @@ void RobotDemo::Scoop()
 
 void RobotDemo::Elevator()
 {
+	cout << "Starting Elevator\n";
 	//Ball Position
 	if (!previousLowLightSensorValue && lowLightSensor.Get()) {
 		ballsInLow++;
@@ -345,6 +349,7 @@ void RobotDemo::Elevator()
 
 void RobotDemo::Shoot()
 {
+	cout << "Starting to Shoot\n";
 	//Flywheel speed
 	
 	float desiredFlywheelSpeed = fender;
