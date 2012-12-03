@@ -85,9 +85,12 @@ void RobotDemo::Autonomous(void)
 		launcherOut.Set(true);
 		launcherIn.Set(false);
 		//End...Shoot First Ball
-		elevator.Set(Relay::kOn);//Begin...Run Elevator
+		
+		//Begin...Run Elevator
+		elevator.Set(Relay::kOn);
 		Wait(2);
-		elevator.Set(Relay::kOff);//End...Run Elevator
+		elevator.Set(Relay::kOff);
+		//End...Run Elevator
 		while (autostate == 1 && IsAutonomous()) {
 			float currentFlywheelSpeed = flywheelspeed.Get();
 			bottomWheelsMotor.Set(currentFlywheelSpeed / 3000);
@@ -104,7 +107,8 @@ void RobotDemo::Autonomous(void)
 		launcherOut.Set(true);
 		launcherIn.Set(false);
 	}
-	if (stick2.GetThrottle() > 2) {//Begin...Drive to bridge
+	//Begin...Drive to bridge
+	if (stick2.GetThrottle() > 2) {
 		while (autostate == 2 && IsAutonomous()) {
 			if (leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690) {
 				autostate = 3;
@@ -114,7 +118,8 @@ void RobotDemo::Autonomous(void)
 	}
 	stopwatch.Reset();
 	stopwatch.Start();
-	if (stick2.GetThrottle() > 2) { //Tip bridge
+	 //Tip bridge
+	if (stick2.GetThrottle() > 2) {
 		while (autostate == 3 && IsAutonomous()) {
 			if (stopwatch.Get() >= 3 && IsAutonomous()) {
 				autostate = 4;
