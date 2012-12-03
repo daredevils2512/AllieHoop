@@ -5,9 +5,9 @@ class RobotDemo : public SimpleRobot
 {
 	//cRIO Slots
 	static const UINT8 ANALOG_SIDECAR_MODULE_1 = 1;
-	static const UINT8 DIGITAL_SIDECAR_MODULE_1 = 2;
-	static const UINT8 SOLENOID_SIDECAR_MODULE_1 = 3;
-	static const UINT8 DIGITAL_SIDECAR_MODULE_2 = 4;
+	static const UINT8 DIGITAL_SIDECAR_MODULE_1 = 1;
+	static const UINT8 SOLENOID_SIDECAR_MODULE_1 = 1;
+	static const UINT8 DIGITAL_SIDECAR_MODULE_2 = 2;
 	
 	// Sidecars
 	static const UINT8 SCOOP_MOTOR_SIDECAR = DIGITAL_SIDECAR_MODULE_1;
