@@ -185,7 +185,7 @@ void RobotDemo::OperatorControl(void)
 
 void RobotDemo::Drive()
 {
-	cout << "Begening Drive Mode\n";
+	printf( "Begening Drive Mode");
 	//Sensitivity of Joystick
 	//X
 	float xInput = stick1.GetX();
@@ -312,7 +312,7 @@ void RobotDemo::Scoop()
 
 void RobotDemo::Elevator()
 {
-	cout << "Starting Elevator\n";
+	printf("Starting Elevator\n");
 	//Ball Position
 	if (!previousLowLightSensorValue && lowLightSensor.Get()) {
 		ballsInLow++;
@@ -338,7 +338,7 @@ void RobotDemo::Elevator()
 		ballInTop = false;
 	}
 	//Elevator
-		if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
+/*		if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
 			elevator.Set(Relay::kReverse);
 		}
 		else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
@@ -350,7 +350,9 @@ void RobotDemo::Elevator()
 	else {
 		elevator.Set(Relay::kOff);
 	}
+	*/
 }
+
 
 
 void RobotDemo::Shoot()
