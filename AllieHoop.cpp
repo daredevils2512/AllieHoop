@@ -57,6 +57,8 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	//for motors themselves
 {
 	GetWatchdog().SetExpiration(10);
+	stick1.SetAxisChannel(Joystick::kTwistAxis, 3);
+	stick1.SetAxisChannel(Joystick::kThrottleAxis, 4);
 	flywheelspeed.SetOutputRange(0, 3000);
 	myRobot.SetInvertedMotor(RobotDrive::kRearRightMotor, true);
 	myRobot.SetInvertedMotor(RobotDrive::kFrontRightMotor, true);
@@ -215,10 +217,10 @@ void RobotDemo::Drive()
 
 float RobotDemo::ConvertAxis(float input){
 	if (input >= 0.05) {
-		return pow((input*0.05f), 2);
+		return pow((input*0.75f), 2);
 	}
 	else if (input <= -0.05) {
-		return pow((input*0.05f), 2)*-1;
+		return pow((input*0.75f), 2)*-1;
 	}
 	else {
 		return 0;
