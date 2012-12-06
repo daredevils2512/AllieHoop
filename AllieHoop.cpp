@@ -318,7 +318,7 @@ void RobotDemo::Elevator()
 		ballsInLow++;
 		previousLowLightSensorValue = true ;
 	}
-	if (previousLowLightSensorValue && !lowLightSensor.Get()) {
+	else if (previousLowLightSensorValue && !lowLightSensor.Get()) {
 		previousLowLightSensorValue = false;
 	}
 	if (highLightSensor.Get()) {
@@ -338,19 +338,21 @@ void RobotDemo::Elevator()
 		ballInTop = false;
 	}
 	//Elevator
-/*		if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
-			elevator.Set(Relay::kReverse);
+	if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
+//			elevator.Set(Relay::kReverse);
+		printf("Elevator Reverse Button\n");
 		}
 		else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
-			elevator.Set(Relay::kForward);
+//			elevator.Set(Relay::kForward);
+			printf("Elevator Foward Button\n");
 		}
 	else if (ballsInLow > 0 || (ballsInHigh == 1 && ballsInLow > 0)) {
-		elevator.Set(Relay::kForward);
+//		elevator.Set(Relay::kForward);
+		printf("Elevator Foward\n");
 	}
 	else {
 		elevator.Set(Relay::kOff);
 	}
-	*/
 }
 
 
