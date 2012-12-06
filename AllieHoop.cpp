@@ -195,7 +195,7 @@ void RobotDemo::Drive()
 	float yOutput = ConvertAxis(yInput);
 	//Twist
 	float twistInput = stick1.GetTwist();
-	float twistOutput = ConvertAxis(twistInput);
+	float twistOutput = ConvertAxis(twistInput * -1);//Twist is inverted
 		
 	if (stick1.GetThrottle() >= 0) {
 		twistOutput = twistOutput/2;
