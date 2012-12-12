@@ -329,10 +329,16 @@ void RobotDemo::Elevator()
 		printf("highLightSensor is true, starting stopwatch1\n");
 	}
 	if (stopwatch1.Get() >= 2.5) {
-		ballsInHigh++;
-		ballsInLow--;
-		stopwatch1.Stop();
-		stopwatch1.Reset();
+		if(ballInTop){
+			ballsInHigh++;
+			ballsInLow--;
+		}
+		else{
+			ballsInHigh++;
+			ballsInLow--;
+			stopwatch1.Stop();
+			stopwatch1.Reset();
+		}
 		printf("stopwatch1 is greater than 2.5\n");
 	}
 	if (ballsInHigh > 0) {
