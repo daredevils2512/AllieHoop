@@ -171,21 +171,19 @@ void RobotDemo::Autonomous(void)
 
 void RobotDemo::OperatorControl(void)
 {
-	cout << "Begining Operator Control\n";
 	wheelsDown.Set(false);
 	GetWatchdog().SetEnabled(false);
 	while (1 == 1)
 	{
-		Drive();
-		Scoop();
+//		Drive();
+//		Scoop();
 		Elevator();
-		Shoot();
+//		Shoot();
 	}
 }
 
 void RobotDemo::Drive()
 {
-	printf( "Begening Drive Mode");
 	//Sensitivity of Joystick
 	//X
 	float xInput = stick1.GetX();
@@ -229,7 +227,6 @@ float RobotDemo::ConvertAxis(float input){
 
 void RobotDemo::Scoop()
 {
-	cout << "Starting Scoop\n";
 	//checks for current scoop mode
 	if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
 		autoscoop = true;
@@ -312,7 +309,7 @@ void RobotDemo::Scoop()
 
 void RobotDemo::Elevator()
 {
-	printf("Starting Elevator\n");
+	static bool previousHighLightSensorValue = false;
 	//Ball Position
 	if (previousLowLightSensorValue == false && lowLightSensor.Get()) {
 		ballsInLow++;
@@ -324,22 +321,24 @@ void RobotDemo::Elevator()
 		printf("previousLowLightSensorValue is true and lowLightSensor is false\n");
 	}
 	if (highLightSensor.Get()) {
-		stopwatch1.Reset();
-		stopwatch1.Start();
-		printf("highLightSensor is true, starting stopwatch1\n");
-	}
-	if (stopwatch1.Get() >= 2.5) {
-		if(ballInTop){
+		if(ballInTop && !previousHighLightSensorValue){
 			ballsInHigh++;
 			ballsInLow--;
+			previousHighLightSensorValue = true;
 		}
-		else{
+		else if(!previousHighLightSensorValue){
+			stopwatch1.Reset();
+			stopwatch1.Start();	
+		}
+	}
+	if(previousHighLightSensorValue && !highLightSensor.Get()){
+		previousHighLightSensorValue = false;
+	}
+	if (stopwatch1.Get() >= 2.5) {
 			ballsInHigh++;
 			ballsInLow--;
 			stopwatch1.Stop();
 			stopwatch1.Reset();
-		}
-		printf("stopwatch1 is greater than 2.5\n");
 	}
 	if (ballsInHigh > 0) {
 		ballInTop = true;
@@ -352,26 +351,24 @@ void RobotDemo::Elevator()
 	//Elevator
 	if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
 			elevator.Set(Relay::kReverse);
-		printf("Elevator Reverse Button\n");
 		}
 		else if (stick2.GetRawButton(ELEVATOR_FOWARD)) {
 			elevator.Set(Relay::kForward);
-			printf("Elevator Foward Button\n");
-		}
-	else if ((ballsInLow > 0 || ballsInHigh > 0) && ballInTop == 0) {
+			}
+	else if (ballsInLow > 0 && ballsInHigh < 2) {
 		elevator.Set(Relay::kForward);
-		printf("Elevator Foward\n");
 	}
 	else {
 		elevator.Set(Relay::kOff);
 	}
+	printf("BallsInHigh == %d\n", ballsInHigh);
+	printf("BallsInLow == %d\n", ballsInLow);
 }
 
 
 
 void RobotDemo::Shoot()
 {
-	cout << "Starting to Shoot\n";
 	//Flywheel speed
 	
 	float desiredFlywheelSpeed = fender;
