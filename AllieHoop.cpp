@@ -21,7 +21,7 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	launcherInSet(false),
 	waitForLeaving(true),
 	fireButton(false),
-	flywheelsOn(false),
+	flywheelsOn(true),
 	autoscoop(false),
 	runBrush(false),
 	ballInTop(false),
@@ -175,10 +175,10 @@ void RobotDemo::OperatorControl(void)
 	GetWatchdog().SetEnabled(false);
 	while (1 == 1)
 	{
-//		Drive();
-//		Scoop();
+		Drive();
+		Scoop();
 		Elevator();
-//		Shoot();
+		Shoot();
 	}
 }
 
@@ -242,9 +242,9 @@ void RobotDemo::Scoop()
 	}
 	//Autoscoop
 	
-	bool scoopBallsButton = stick1.GetRawButton(SCOOP_BALLS);
-	bool scoopBridgeButton = stick1.GetRawButton(SCOOP_BRIDGE);
-	
+//	bool scoopBallsButton = stick1.GetRawButton(SCOOP_BALLS);
+//	bool scoopBridgeButton = stick1.GetRawButton(SCOOP_BRIDGE);
+/*	
 	if (autoscoop == true) {
 		if (scoopUp.Get()) {
 			runBrush = false;
@@ -288,24 +288,29 @@ void RobotDemo::Scoop()
 					scoopMotorValue = -0.6f;
 			}
 		}
-		else {
-			scoopMotorValue = 0;	
-		}
 		if (stick2.GetRawButton(RUN_BRUSH_MOTOR)) {
 			runBrush = true;
 		}
 		else {
 			runBrush = false;
 		}
+*/
+		if(stick1.GetRawButton(SCOOP_UP)){
+			scoopMotorValue = -0.6f;
+		}
+		else if(stick1.GetRawButton(SCOOP_DOWN)){
+			scoopMotorValue = 0.6f;
+		}
 		//Run Brush Motor
 		if (runBrush){
-			brushMotor.Set(Relay::kOn);
+			brushMotor.Set(Relay::kForward);
 		}
 		else {
 			brushMotor.Set(Relay::kOff);
 		}
+		printf("Scoop %f\n",scoopMotorValue);
 	}
-}
+//}
 
 void RobotDemo::Elevator()
 {
@@ -314,11 +319,9 @@ void RobotDemo::Elevator()
 	if (previousLowLightSensorValue == false && lowLightSensor.Get()) {
 		ballsInLow++;
 		previousLowLightSensorValue = true ;
-		printf("previousLowLightSensorValue is false and lowLightSensor is true\n");
 	}
 	else if (previousLowLightSensorValue && lowLightSensor.Get() == false) {
 		previousLowLightSensorValue = false;
-		printf("previousLowLightSensorValue is true and lowLightSensor is false\n");
 	}
 	if (highLightSensor.Get()) {
 		if(ballInTop && !previousHighLightSensorValue){
@@ -342,11 +345,9 @@ void RobotDemo::Elevator()
 	}
 	if (ballsInHigh > 0) {
 		ballInTop = true;
-		printf("ballsInHigh is greater than 0\n");
 	}
 	else {
 		ballInTop = false;
-		printf("There are no balls in the top\n");
 	}
 	//Elevator
 	if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
@@ -361,8 +362,6 @@ void RobotDemo::Elevator()
 	else {
 		elevator.Set(Relay::kOff);
 	}
-	printf("BallsInHigh == %d\n", ballsInHigh);
-	printf("BallsInLow == %d\n", ballsInLow);
 }
 
 
@@ -370,7 +369,7 @@ void RobotDemo::Elevator()
 void RobotDemo::Shoot()
 {
 	//Flywheel speed
-	
+	float currentSpeed = 0;
 	float desiredFlywheelSpeed = fender;
 	
 	if (stick2.GetRawButton(KEY_BUTTON)) {  
@@ -394,6 +393,8 @@ void RobotDemo::Shoot()
 	}
 	if (flywheelsOn) {
 			bottomWheelsMotor.Set(flywheelspeed.Get() / 3000);
+			currentSpeed = (flywheelspeed.Get() / 3000);
+			printf("PID = %f\n", currentSpeed);
 	}
 	else {
 		bottomWheelsMotor.Set(0);
