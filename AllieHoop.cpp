@@ -227,79 +227,72 @@ float RobotDemo::ConvertAxis(float input){
 
 void RobotDemo::Scoop()
 {
+	bool scoopBallsButton = stick1.GetRawButton(SCOOP_BALLS);
+	bool scoopBridgeButton = stick1.GetRawButton(SCOOP_BRIDGE);
+	bool upperLimitSwitch = scoopUp.Get();
+	bool lowerLimitSwitch = scoopDown.Get();
 	//checks for current scoop mode
-	if (stick1.GetRawButton(SCOOP_BALLS) || stick1.GetRawButton(SCOOP_BRIDGE)) {
+	if (scoopBallsButton || scoopBridgeButton) {
 		autoscoop = true;
 	}
 	else if (stick1.GetRawButton(SCOOP_DOWN) || stick1.GetRawButton(SCOOP_UP)) {
 		autoscoop = false;
 	}
-	if (stick1.GetRawButton(GRIPPYS_DOWN)) {
-		wheelsDown.Set(true);
-	}
-	else {
-		wheelsDown.Set(false);
-	}
 	//Autoscoop
 	
-//	bool scoopBallsButton = stick1.GetRawButton(SCOOP_BALLS);
-//	bool scoopBridgeButton = stick1.GetRawButton(SCOOP_BRIDGE);
-/*	
+
+
 	if (autoscoop == true) {
-		if (scoopUp.Get()) {
+		if (upperLimitSwitch) {
 			runBrush = false;
 		}
 		else if (scoopBallsButton) {
 			runBrush = true;
 		}
 		if (scoopBallsButton || scoopBridgeButton) {
-			if (scoopDown.Get()) {
-				scoopMotorValue = 0;
+			if (!lowerLimitSwitch) {
+				scoopMotor.Set(0);
 			}
 			else if (scoopBridgeButton) {
-				scoopMotorValue = 1;
+				scoopMotor.Set(1);
 			}
-			else {
-					scoopMotorValue = 0.4f;
+			else if (scoopBallsButton) {
+					scoopMotor.Set(0.4f);
 			}
 		}
-		else if (scoopUp.Get()) {
-			scoopMotorValue = 0;
+		else if (upperLimitSwitch) {
+			scoopMotor.Set(0);
 		}
 		else {
-				scoopMotorValue = -0.85f;
+				scoopMotor.Set(-0.85f);
 		}
 	}
 	else {
 		//Manual scoop
 		if (stick1.GetRawButton(SCOOP_DOWN)) {
-			if (scoopDown.Get()) {
-				scoopMotorValue = 0;
+			if (!lowerLimitSwitch) {
+				scoopMotor.Set(0);
 			}
-			else {
-					scoopMotorValue = 0.6f;
+			else if (stick1.GetRawButton(SCOOP_DOWN)) {
+					scoopMotor.Set(0.6f);
 			}
 		}
 		else if (stick1.GetRawButton(SCOOP_UP)) {
-			if (scoopUp.Get()) {
-				scoopMotorValue = 0;
+			if (upperLimitSwitch) {
+				scoopMotor.Set(0);
 			}
-			else {
-					scoopMotorValue = -0.6f;
+			else if (stick1.GetRawButton(SCOOP_UP)) {
+					scoopMotor.Set(-0.6f);
 			}
+		}
+		else{
+			scoopMotor.Set(0);
 		}
 		if (stick2.GetRawButton(RUN_BRUSH_MOTOR)) {
 			runBrush = true;
 		}
 		else {
 			runBrush = false;
-		}
-*/
-		if(stick1.GetRawButton(SCOOP_UP)){
-			scoopMotorValue = -0.6f;
-		}
-		else if(stick1.GetRawButton(SCOOP_DOWN)){
-			scoopMotorValue = 0.6f;
 		}
 		//Run Brush Motor
 		if (runBrush){
@@ -308,9 +301,8 @@ void RobotDemo::Scoop()
 		else {
 			brushMotor.Set(Relay::kOff);
 		}
-		printf("Scoop %f\n",scoopMotorValue);
 	}
-//}
+}
 
 void RobotDemo::Elevator()
 {
