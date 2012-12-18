@@ -1,5 +1,5 @@
 #include "WPILib.h"
-
+#include "cpplogger/Logger.hpp"
 
 class RobotDemo : public SimpleRobot
 {
@@ -88,6 +88,8 @@ class RobotDemo : public SimpleRobot
 	bool previousLowLightSensorValue;
 	bool button1;
 
+	Logger logger;
+	
 	Joystick stick1;
 	Joystick stick2;
 	Jaguar scoopMotor;

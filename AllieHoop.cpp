@@ -56,6 +56,8 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 	//robotdrive function my accept speedcontoller memory locations as placeholders
 	//for motors themselves
 {
+	logger.Init("myoutput.log");
+	logger.EchoOn();
 	GetWatchdog().SetExpiration(10);
 	stick1.SetAxisChannel(Joystick::kTwistAxis, 3);
 	stick1.SetAxisChannel(Joystick::kThrottleAxis, 4);
@@ -68,7 +70,7 @@ RobotDemo::RobotDemo(void):	//these must be intialized in the same order
 
 void RobotDemo::Autonomous(void)
 {
-	cout << "Beginning Autonomous\n";
+	logger.LogEvent(0, "Autonomous", "Autonomous", "Beginning Autonomous");
 	GetWatchdog().SetEnabled(false);
 	wheelsDown.Set(true);
 	leftWheels.Reset();
@@ -82,7 +84,7 @@ void RobotDemo::Autonomous(void)
 		}
 	}
 	if (IsAutonomous()) {
-		cout << "Begin..Shoot first ball\n";
+		logger.LogEvent(0, "Autonomous", "Shooting", "Begin..Shoot first ball");
 		//Begin...Shoot First Ball
 		launcherIn.Set(true);
 		launcherOut.Set(false);
@@ -105,7 +107,7 @@ void RobotDemo::Autonomous(void)
 		}
 	}
 	if (IsAutonomous()) {
-		cout << "Shoot second ball\n";
+		logger.LogEvent(0, "Autonomous", "Shooting", "Shoot second ball");
 		//Begin...Shoot Second Ball
 		launcherIn.Set(true);
 		launcherOut.Set(false);
@@ -115,20 +117,20 @@ void RobotDemo::Autonomous(void)
 	}
 	//Begin...Drive to bridge
 	if (stick2.GetThrottle() > 2) {
-		cout << "begin driving to bridge\n";
+		logger.LogEvent(0, "Autonomous", "Driving", "Begin driving to bridge");
 		while (autostate == 2 && IsAutonomous()) {
 			if (leftWheels.Get() >= 3690 && rightWheels.Get() >= 3690) {
 				autostate = 3;
 			}
 			myRobot.TankDrive(0.5, (leftWheels.Get() - rightWheels.Get())*0.001 + 0.5);
-			cout << "Drive to bridge stopped\n";
+			logger.LogEvent(0, "Autonomous", "Driving", "Drive to bridge stopped");
 		}//End...Drive to Bridge
 	}
 	stopwatch.Reset();
 	stopwatch.Start();
 	 //Tip bridge
 	if (stick2.GetThrottle() > 2) {
-		cout << "Tipping bridge\n";
+		logger.LogEvent(0, "Autonomous", "Scoop", "Tipping bridge");
 		while (autostate == 3 && IsAutonomous()) {
 			if (stopwatch.Get() >= 3 && IsAutonomous()) {
 				autostate = 4;
@@ -165,7 +167,7 @@ void RobotDemo::Autonomous(void)
 	}
 	stopwatch.Stop();
 	stopwatch.Reset();
-	cout << "Tipping bridge ended\n";
+	logger.LogEvent(0, "Autonomous", "Scoop", "Tipping bridge ended");
 }//End...Tip bridge
 
 
@@ -314,11 +316,11 @@ void RobotDemo::Elevator()
 	if (previousLowLightSensorValue == false && lowLightSensor.Get()) {
 		ballsInLow++;
 		previousLowLightSensorValue = true ;
-		printf("previousLowLightSensorValue is false and lowLightSensor is true\n");
+		logger.LogEvent(0, "Operator", "Elevator", "previousLowLightSensorValue is false and lowLightSensor is true");
 	}
 	else if (previousLowLightSensorValue && lowLightSensor.Get() == false) {
 		previousLowLightSensorValue = false;
-		printf("previousLowLightSensorValue is true and lowLightSensor is false\n");
+		logger.LogEvent(0, "Operator", "Elevator", "previousLowLightSensorValue is true and lowLightSensor is false");
 	}
 	if (highLightSensor.Get()) {
 		if(ballInTop && !previousHighLightSensorValue){
@@ -342,11 +344,11 @@ void RobotDemo::Elevator()
 	}
 	if (ballsInHigh > 0) {
 		ballInTop = true;
-		printf("ballsInHigh is greater than 0\n");
+		logger.LogEvent(0, "Operator", "Elevator", "ballsInHigh is greater than 0");
 	}
 	else {
 		ballInTop = false;
-		printf("There are no balls in the top\n");
+		logger.LogEvent(0, "Operator", "Elevator", "There are no balls in the top");
 	}
 	//Elevator
 	if (stick2.GetRawButton(ELEVATOR_REVERSE)) {
@@ -361,8 +363,8 @@ void RobotDemo::Elevator()
 	else {
 		elevator.Set(Relay::kOff);
 	}
-	printf("BallsInHigh == %d\n", ballsInHigh);
-	printf("BallsInLow == %d\n", ballsInLow);
+	logger.LogEvent(0, "Operator", "Elevator", "BallsInHigh == %d", ballsInHigh);
+	logger.LogEvent(0, "Operator", "Elevator", "BallsInLow == %d", ballsInLow);
 }
 
 
