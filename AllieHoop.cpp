@@ -244,10 +244,10 @@ void RobotDemo::Scoop()
 
 	if (autoscoop == true) {
 		if (upperLimitSwitch) {
-			runBrush = false;
+			brushMotor.Set(Relay::kOff);
 		}
 		else if (scoopBallsButton) {
-			runBrush = true;
+			brushMotor.Set(Relay::kForward);
 		}
 		if (scoopBallsButton || scoopBridgeButton) {
 			if (!lowerLimitSwitch) {
@@ -273,7 +273,7 @@ void RobotDemo::Scoop()
 			if (!lowerLimitSwitch) {
 				scoopMotor.Set(0);
 			}
-			else if (stick1.GetRawButton(SCOOP_DOWN)) {
+			else {
 					scoopMotor.Set(0.6f);
 			}
 		}
@@ -281,7 +281,7 @@ void RobotDemo::Scoop()
 			if (upperLimitSwitch) {
 				scoopMotor.Set(0);
 			}
-			else if (stick1.GetRawButton(SCOOP_UP)) {
+			else {
 					scoopMotor.Set(-0.6f);
 			}
 		}
@@ -289,13 +289,6 @@ void RobotDemo::Scoop()
 			scoopMotor.Set(0);
 		}
 		if (stick2.GetRawButton(RUN_BRUSH_MOTOR)) {
-			runBrush = true;
-		}
-		else {
-			runBrush = false;
-		}
-		//Run Brush Motor
-		if (runBrush){
 			brushMotor.Set(Relay::kForward);
 		}
 		else {
