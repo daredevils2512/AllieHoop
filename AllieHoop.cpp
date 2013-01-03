@@ -354,8 +354,10 @@ void RobotDemo::Elevator()
 void RobotDemo::Shoot()
 {
 	//Flywheel speed
-	float currentSpeed = 0;
-	float desiredFlywheelSpeed = fender;
+	static bool previousButtonIncrease=false;
+	static bool previousButtonDecrease=false;
+	static float currentSpeed = 0;
+	static float desiredFlywheelSpeed = fender;
 	
 	if (stick2.GetRawButton(KEY_BUTTON)) {  
 		desiredFlywheelSpeed = key;
@@ -363,12 +365,14 @@ void RobotDemo::Shoot()
 	else if (stick2.GetRawButton(FENDER_BUTTON)){
 		desiredFlywheelSpeed = fender;
 	}
-	else if (stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED)) {
+	else if (stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED) && !previousButtonDecrease) {
 		desiredFlywheelSpeed = (desiredFlywheelSpeed - 100);
 	}
-	else if (stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED)) {
+	else if (stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED) && !previousButtonIncrease) {
 		desiredFlywheelSpeed = (desiredFlywheelSpeed + 100);
 	}
+	previousButtonDecrease = stick2.GetRawButton(REDUCE_FLYWHEEL_SPEED);
+	previousButtonIncrease = stick2.GetRawButton(INCREASE_FLYWHEEL_SPEED);
 	flywheelspeed.SetSetpoint(desiredFlywheelSpeed);
 	if (stick2.GetRawButton(FLYWHEELS_ON)) {
 		flywheelsOn = true;
